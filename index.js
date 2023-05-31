@@ -5,6 +5,8 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 
+const PORT = process.env.PORT || 3030;
+
 //--------midlewares ROUTES--------//
 const authRoute = require("./routes/auth.js");
 const userRoute = require("./routes/users.js");
@@ -59,6 +61,6 @@ app.use("/api/league", LeagueRoute);
 
 
 
-app.listen("5000", () => {
+app.listen(PORT, () => {
   console.log("Backend is running.");
 });
