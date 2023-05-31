@@ -60,16 +60,7 @@ router.put("/:id", verifyAdmin, async (req, res) => {
   }
 });
 
- // GET total number of categories
- router.get("/count", async (req, res) => {
-  try {
-    const count = await League.countDocuments();
-    console.log(count);
-    res.status(200).json({ count });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+
 
 
 
