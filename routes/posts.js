@@ -1,0 +1,128 @@
+const router = require("express").Router();
+const User = require("../models/User");
+const Post = require("../models/Post");
+const {verifyAdmin} = require("../utils/verifytoken");
+
+//for now only the admin can crud posts
+//CREATE POST
+router.post("/",verifyAdmin, async (req, res) => {
+    const newPost = new Post(req.body);
+  try {
+    const savedPost = await newPost.save();
+    res.status(200).json(savedPost);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+//UPDATE POST
+router.put("/:id",verifyAdmin, async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      if (post.username === req.body.username) {
+        try {
+          const updatedPost = await Post.findByIdAndUpdate(
+            req.params.id,
+            {
+              $set: req.body,
+            },
+            { new: true }
+          );
+          res.status(200).json(updatedPost);
+        } catch (err) {
+          res.status(500).json(err);
+        }
+      } else {
+        res.status(401).json("Vous pouvez mettre à jour uniquement votre propre publication !");
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+//DELETE POST
+router.delete("/:id",verifyAdmin, async (req, res) => {
+    try {
+      const post = await Post.findById(req.params.id);
+      console.log(req.body.username);
+      if (post.username === req.body.username) {
+        try {
+          await Post.deleteOne({ _id: req.params.id });
+          res.status(200).json("Le post a été supprimé..");
+        } catch (err) {
+          res.status(500).json(err);
+        }
+      } else {
+        res.status(401).json("Vous pouvez seulement supprimer votre publication !");
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+  
+  // Delete multiple posts or delete all posts
+router.delete("/", verifyAdmin, async (req, res) => {
+  const { postsIds } = req.body;
+  try {
+    // Delete multiple League
+    await Post.deleteMany({ _id: { $in: postsIds } });
+    res.status(200).json("posts have been deleted.");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+  //GET POST
+router.get("/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    res.status(200).json(post);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+ 
+
+// GET total number of categories
+router.get("/count", async (req, res) => {
+  console.log(req);
+  try {
+    const count = await Post.countDocuments({}); // Pass an empty object to count all documents
+    console.log(count);
+    res.status(200).json({ count });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+//GET ALL POSTS
+//also get posts for only one user or cat /?user=adel or /?cat=league1
+router.get("/", async (req, res) => {
+    const username = req.query.user;
+    const catName = req.query.cat;
+    try {
+      let posts;
+      //if there is username condit ?user then find the posts related
+      if (username) {
+        posts = await Post.find({ username : username });
+      }  //if there is catg condit ?ca then find the posts related
+       else if (catName) {
+        posts = await Post.find({
+          categories: {
+            $in: [catName],
+          },
+        }); //if there in no user or cat just find all posts
+      } else {
+        posts = await Post.find();
+      }
+      res.status(200).json(posts);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+
+module.exports = router;
