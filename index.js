@@ -18,10 +18,11 @@ const countryRoute = require("./routes/country.js");
 const LeagueRoute = require("./routes/league.js");
 const path = require("path");
 
-app.use(cors({
-  origin: '*',
-}));
+const corsOptions = {
+  origin: 'http://localhost:4173',
+};
 
+app.use(cors(corsOptions));
 //mongoDb url 
 dotenv.config();
 //so the app can send json data
