@@ -1,0 +1,243 @@
+https://blogapi-vbdw.onrender.com/api/all-endpoint{connexion,posts,tags.......ex}
+
+
+---------------------------------Récupérer les articles de blog--------------------------------
+
+L'API fournit des endpoints pour gérer les utilisateurs et les publications du blog.
+
+Base URL: https://blogapi-vbdw.onrender.com/api
+
+
+------> 1- Récupérer les articles -----------------------------------------------------
+
+
+Endpoint : Base URL/posts/  ---> https://blogapi-vbdw.onrender.com/api/posts/
+
+Paramètres du corps de la requête :
+
+user (optionnel) : Le nom d'utilisateur pour filtrer les articles liés à cet utilisateur. Si ce paramètre est spécifié, seuls les articles de cet utilisateur seront renvoyés.
+
+https://blogapi-vbdw.onrender.com/api/posts/?user=adel
+
+
+cat (optionnel) : Le nom de la catégorie pour filtrer les articles liés à cette catégorie. Si ce paramètre est spécifié, seuls les articles appartenant à cette catégorie seront renvoyés.  
+
+https://blogapi-vbdw.onrender.com/api/posts/?cat=league1
+
+Réponse :
+
+La réponse (HTTP 200 (OK).) renverra une liste d'articles de blog correspondant aux critères de recherche.
+
+
+
+
+exemple :  
+
+       get(https://blogapi-vbdw.onrender.com/api/posts/)
+
+
+res => 
+
+[
+    {
+        "_id": "64755f7bbc7ecb7fd7d14d73",
+        "title": "new post78",
+        "desc": "new post of the day ",
+        "content": "<h3><span style=\"background-color: rgb(230, 0, 0); color: rgb(255, 255, 255);\"> updated </span></h3><h2>new post of the day&nbsp;</h2><h4><strong> </strong><strong style=\"color: rgb(102, 185, 102);\"> How can real madrid win agisnt barca tomrow</strong></h4><ol><li>you need to open an account</li><li>this is real info</li></ol><p><br></p><p>",
+        "photo": [],
+        "video": [],
+        "username": "toumi001",
+        "club": "react",
+        "categories": [
+            "i hope this work",
+            "toumi",
+            "adel"
+        ],
+        "tags": [
+            "test2",
+            "esm"
+        ],
+        "country": [
+            "adel 3"
+        ],
+        "league": [
+            "premuim league"
+        ],
+        "createdAt": "2023-05-30T02:29:15.376Z",
+        "updatedAt": "2023-05-30T16:59:38.627Z",
+        "__v": 0
+    },
+  
+    {
+        "_id": "6475c65295471f4b00479b3d",
+        "title": "my home 001",
+        "desc": "my home 001",
+        "content": "<p>my home 001</p>",
+        "photo": [],
+        "video": [],
+        "username": "toumi001",
+        "club": "madrid",
+        "categories": [
+            "toumi",
+            "i hope this work"
+        ],
+        "tags": [
+            "esm"
+        ],
+        "country": [
+            "adel 3"
+        ],
+        "league": [
+            "premuim league"
+        ],
+        "createdAt": "2023-05-30T09:48:02.887Z",
+        "updatedAt": "2023-05-30T09:48:02.887Z",
+        "__v": 0
+    },
+    {
+        "_id": "6475c66795471f4b00479b45",
+        "title": "bvb 001",
+        "desc": "bvb 001",
+        "content": "<p>bvb 001</p>",
+        "photo": [],
+        "video": [],
+        "username": "toumi001",
+        "club": "madrid",
+        "categories": [
+            "toumi"
+        ],
+        "tags": [
+            "esm"
+        ],
+        "country": [
+            "adel 3"
+        ],
+        "league": [
+            "2league"
+        ],
+        "createdAt": "2023-05-30T09:48:23.536Z",
+        "updatedAt": "2023-05-30T09:48:23.536Z",
+        "__v": 0
+    },
+
+
+]
+
+
+
+--------> 2- Récupérer un article de blog par ID-----------------------------------------------
+
+
+
+Endpoint : Base URL/posts/  ---> https://blogapi-vbdw.onrender.com/api/posts/:id
+
+Paramètres du corps de la requête :
+
+:id :  L'identifiant de l'article de blog que vous souhaitez récupérer
+
+
+Réponse :
+
+200 OK : En cas de succès, la réponse aura un code d'état 
+
+500 Internal Server Error :Si une erreur survient lors du traitement de la requête, la réponse aura un code d'état HTTP 500 (Erreur interne du serveur) et renverra les détails de l'erreur..
+
+
+
+exemple : 
+
+
+ get(https://blogapi-vbdw.onrender.com/api/posts/64755f7bbc7ecb7fd7d14d73)
+
+
+res =>
+
+{
+    "_id": "64755f7bbc7ecb7fd7d14d73",
+    "title": "new post78",
+    "desc": "new post of the day ",
+    "content": "<h3><span style=\"background-color: rgb(230, 0, 0); color: rgb(255, 255, 255);\"> updated </span></h3><h2>new post of the day&nbsp;</h2><h4><strong> </strong><strong style=\"color: rgb(102, 185, 102);\"> How can real madrid win agisnt barca tomrow</strong></h4><ol><li>you need to open an account</li><li>this is real info</li></ol><p><br></p><p></p>",
+    "photo": [],
+    "video": [],
+    "username": "toumi001",
+    "club": "react",
+    "categories": [
+        "i hope this work",
+        "toumi",
+        "adel"
+    ],
+    "tags": [
+        "test2",
+        "esm"
+    ],
+    "country": [
+        "adel 3"
+    ],
+    "league": [
+        "premuim league"
+    ],
+    "createdAt": "2023-05-30T02:29:15.376Z",
+    "updatedAt": "2023-05-30T16:59:38.627Z",
+    "__v": 0
+}
+
+
+
+
+
+
+
+
+
+
+
+Note / Voici l'objet post 
+
+  {
+    title: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    desc: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    photo: {
+      type: Array,
+      required: false,
+    },
+    video: {
+      type: Array,
+      required: false,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    club: {
+      type: String,
+      required: false,
+    },
+    categories: {
+      type: Array,
+      required: false,
+    },
+    tags: {
+        type: Array,
+        required: false,
+      },
+    country: {
+        type: Array,
+        required: false,
+      },
+    league: {
+        type: Array,
+        required: false,
+      },
+  },
+  { timestamps: true }

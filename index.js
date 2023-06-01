@@ -18,7 +18,9 @@ const countryRoute = require("./routes/country.js");
 const LeagueRoute = require("./routes/league.js");
 const path = require("path");
 
-
+app.use(cors({
+  origin: '*',
+}));
 
 //mongoDb url 
 dotenv.config();
@@ -26,7 +28,7 @@ dotenv.config();
 app.use(express.json());
 
 // Enable CORS for all routes
-app.use(cors());
+
 
 //connecting mongoDB
 mongoose.connect(process.env.MONGO_URL,
