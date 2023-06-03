@@ -16,7 +16,7 @@ const countryRoute = require("./routes/country.js");
 const LeagueRoute = require("./routes/league.js");
 const path = require("path");
 
-
+const PORT = process.env.PORT || 3030;
 //hendlig file with muller
 const multer = require("multer");
 //mongoDb url 
@@ -81,6 +81,6 @@ app.post('/api/upload', upload.array('images', 5), (req, res) => {
 
 //end of files storage
 
-app.listen("5000", () => {
+app.listen(PORT, () => {
   console.log("Backend is running.");
 });
