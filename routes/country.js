@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Country = require("../models/pays");
+const Country = require("../models/Country");
 const {verifyAdmin} = require("../utils/verifytoken");
 //creating new country
 router.post("/",verifyAdmin, async (req, res) => {
@@ -72,6 +72,15 @@ router.delete("/", verifyAdmin, async (req, res) => {
 });
 
 
-
+  // GET total number of categories
+  router.get("/count", async (req, res) => {
+    try {
+      const count = await Country.countDocuments();
+      console.log(count);
+      res.status(200).json({ count });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 module.exports = router;

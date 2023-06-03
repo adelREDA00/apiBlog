@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const League = require("../models/champions");
+const League = require("../models/League");
 const {verifyAdmin} = require("../utils/verifytoken");
 
 //creating new cat
@@ -60,7 +60,16 @@ router.put("/:id", verifyAdmin, async (req, res) => {
   }
 });
 
-
+ // GET total number of categories
+ router.get("/count", async (req, res) => {
+  try {
+    const count = await League.countDocuments();
+    console.log(count);
+    res.status(200).json({ count });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 
 

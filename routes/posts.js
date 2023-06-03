@@ -15,6 +15,8 @@ router.post("/",verifyAdmin, async (req, res) => {
   }
 });
 
+ 
+
 
 //UPDATE POST
 router.put("/:id",verifyAdmin, async (req, res) => {
@@ -76,7 +78,7 @@ router.delete("/", verifyAdmin, async (req, res) => {
   //GET POST
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate('user').populate('categories').populate('club').populate('tags').populate('country').populate('league').populate('likes').populate('player').populate('natclub');
     res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
@@ -85,33 +87,68 @@ router.get("/:id", async (req, res) => {
 
  
 
+// GET total number of categories
+router.get("/count", async (req, res) => {
+  try {
+    const postCount = await Post.count();
+    res.status(200).json({ count: postCount });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 
 //GET ALL POSTS
-//also get posts for only one user or cat /?user=adel or /?cat=league1
+//also get posts for only one user or cat /?user=adel or /?cat=league1 ....ex
 router.get("/", async (req, res) => {
-    const username = req.query.user;
-    const catName = req.query.cat;
-    try {
-      let posts;
-      //if there is username condit ?user then find the posts related
-      if (username) {
-        posts = await Post.find({ username : username });
-      }  //if there is catg condit ?ca then find the posts related
-       else if (catName) {
-        posts = await Post.find({
-          categories: {
-            $in: [catName],
-          },
-        }); //if there in no user or cat just find all posts
-      } else {
-        posts = await Post.find();
-      }
-      res.status(200).json(posts);
-    } catch (err) {
-      res.status(500).json(err);
+  const userId = req.query.user; // Get user ID from query parameters
+  const categoryId = req.query.cat;
+  const clubId = req.query.club;
+  const natclubId = req.query.natclub;
+  const countryId = req.query.country;
+  const playerId = req.query.player;
+  const leagueId = req.query.league;
+  const tagId = req.query.tag;
+
+  try {
+    let posts;
+
+    if (userId) {
+      // Find posts by user ID
+      posts = await Post.find({ user: userId }).populate('user');
+    } else if (categoryId) {
+      // Find posts by category ID
+      posts = await Post.find({ categories: categoryId }).populate('user');
+    } else if (clubId) {
+      // Find posts by club ID
+      posts = await Post.find({ club: clubId }).populate('user').populate('club');
+    } else if (natclubId) {
+      // Find posts by national club ID
+      posts = await Post.find({ nationalClub: natclubId }).populate('user').populate('natclub');
+    } else if (countryId) {
+      // Find posts by country ID
+      posts = await Post.find({ country: countryId }).populate('user').populate('country');
+    } else if (playerId) {
+      // Find posts by player ID
+      posts = await Post.find({ player: playerId }).populate('user').populate('player');
+    } else if (leagueId) {
+      // Find posts by league ID
+      posts = await Post.find({ league: leagueId }).populate('user').populate('league');
+    } else if (tagId) {
+      // Find posts by tag ID
+      posts = await Post.find({ tags: tagId }).populate('user').populate('club');
+    } else {
+      // Find all posts
+      posts = await Post.find().populate('user').populate('categories').populate('tags').populate('likes');
     }
-  });
+
+    res.status(200).json(posts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 
 module.exports = router;

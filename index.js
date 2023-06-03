@@ -5,8 +5,6 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 
-const PORT = process.env.PORT || 3030;
-
 //--------midlewares ROUTES--------//
 const authRoute = require("./routes/auth.js");
 const userRoute = require("./routes/users.js");
@@ -18,17 +16,16 @@ const countryRoute = require("./routes/country.js");
 const LeagueRoute = require("./routes/league.js");
 const path = require("path");
 
-app.use(cors({
-  origin: '*',
-}));
 
+//hendlig file with muller
+const multer = require("multer");
 //mongoDb url 
 dotenv.config();
 //so the app can send json data
 app.use(express.json());
 
 // Enable CORS for all routes
-
+app.use(cors());
 
 //connecting mongoDB
 mongoose.connect(process.env.MONGO_URL,
@@ -61,8 +58,29 @@ app.use("/api/league", LeagueRoute);
 
 
 
+//files storage
+// File storage
+app.use('/images', express.static(path.join(__dirname, '/images')));
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    const fileName = Date.now() + path.extname(file.originalname);
+    cb(null, fileName);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/api/upload', upload.array('images', 5), (req, res) => {
+  res.status(200).json('Images uploaded successfully!');
+});
 
 
-app.listen(PORT, () => {
+//end of files storage
+
+app.listen("5000", () => {
   console.log("Backend is running.");
 });

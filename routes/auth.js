@@ -37,14 +37,14 @@ router.post("/register", async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user) {
-      const errorMessage = "Nom d'utilisateur incorrect. Veuillez vérifier et réessayer.";
+      const errorMessage = "Mauvaises informations d'identification.";
       return res.status(400).json(errorMessage);
     }
 
     const validated = await bcrypt.compare(password, user.password);
      //comparing the user pw
     if (!validated) {
-      const errorMessage = "Mot de passe incorrect. Veuillez réessayer";
+      const errorMessage = "Mauvaises informations d'identification.";
       return res.status(400).json(errorMessage);
     }
 
