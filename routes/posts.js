@@ -21,8 +21,7 @@ router.post("/",verifyAdmin, async (req, res) => {
 //UPDATE POST
 router.put("/:id",verifyAdmin, async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
-      if (post.username === req.body.username) {
+    
         try {
           const updatedPost = await Post.findByIdAndUpdate(
             req.params.id,
@@ -35,9 +34,7 @@ router.put("/:id",verifyAdmin, async (req, res) => {
         } catch (err) {
           res.status(500).json(err);
         }
-      } else {
-        res.status(401).json("Vous pouvez mettre à jour uniquement votre propre publication !");
-      }
+
     } catch (err) {
       res.status(500).json(err);
     }
@@ -46,18 +43,15 @@ router.put("/:id",verifyAdmin, async (req, res) => {
 //DELETE POST
 router.delete("/:id",verifyAdmin, async (req, res) => {
     try {
-      const post = await Post.findById(req.params.id);
-      console.log(req.body.username);
-      if (post.username === req.body.username) {
+     
         try {
           await Post.deleteOne({ _id: req.params.id });
           res.status(200).json("Le post a été supprimé..");
         } catch (err) {
           res.status(500).json(err);
         }
-      } else {
-        res.status(401).json("Vous pouvez seulement supprimer votre publication !");
-      }
+  
+      
     } catch (err) {
       res.status(500).json(err);
     }
@@ -140,7 +134,7 @@ router.get("/", async (req, res) => {
       posts = await Post.find({ tags: tagId }).populate('user').populate('club');
     } else {
       // Find all posts
-      posts = await Post.find().populate('user').populate('categories').populate('tags').populate('likes');
+      posts = await Post.find().populate('user').populate('categories').populate('club').populate('country').populate('league').populate('tags').populate('likes');
     }
 
     res.status(200).json(posts);
