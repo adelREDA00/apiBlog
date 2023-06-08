@@ -24,8 +24,8 @@ const PostSchema = new mongoose.Schema(
       required: true,
     },
     photo: {
-      type: Array,
-      required: false,
+      type: String,
+      required: true,
     },
     video: {
       type: Array,

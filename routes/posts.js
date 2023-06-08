@@ -63,7 +63,7 @@ router.delete("/", verifyAdmin, async (req, res) => {
   try {
     // Delete multiple League
     await Post.deleteMany({ _id: { $in: postsIds } });
-    res.status(200).json("posts have been deleted.");
+    res.status(200).json("Le post a été supprimé.");
   } catch (err) {
     res.status(500).json(err);
   }
@@ -110,31 +110,32 @@ router.get("/", async (req, res) => {
 
     if (userId) {
       // Find posts by user ID
-      posts = await Post.find({ user: userId }).populate('user');
+      posts = await Post.find({ user: userId }).select('-content').populate('user');
     } else if (categoryId) {
       // Find posts by category ID
-      posts = await Post.find({ categories: categoryId }).populate('user');
+      posts = await Post.find({ categories: categoryId }).populate('categories').select('-content').populate('user');
     } else if (clubId) {
       // Find posts by club ID
-      posts = await Post.find({ club: clubId }).populate('user').populate('club');
+      posts = await Post.find({ club: clubId }).select('-content').populate('user').populate('club');
     } else if (natclubId) {
       // Find posts by national club ID
-      posts = await Post.find({ nationalClub: natclubId }).populate('user').populate('natclub');
+      posts = await Post.find({ nationalClub: natclubId }).select('-content').populate('user').populate('natclub');
     } else if (countryId) {
       // Find posts by country ID
-      posts = await Post.find({ country: countryId }).populate('user').populate('country');
+      posts = await Post.find({ country: countryId }).select('-content').populate('user').populate('country');
     } else if (playerId) {
       // Find posts by player ID
-      posts = await Post.find({ player: playerId }).populate('user').populate('player');
+      posts = await Post.find({ player: playerId }).select('-content').populate('user').populate('player');
     } else if (leagueId) {
       // Find posts by league ID
-      posts = await Post.find({ league: leagueId }).populate('user').populate('league');
+      posts = await Post.find({ league: leagueId }).select('-content').populate('user').populate('league');
     } else if (tagId) {
       // Find posts by tag ID
-      posts = await Post.find({ tags: tagId }).populate('user').populate('club');
+      posts = await Post.find({ tags: tagId }).select('-content').populate('user').populate('club');
     } else {
       // Find all posts
-      posts = await Post.find().populate('user').populate('categories').populate('club').populate('country').populate('league').populate('tags').populate('likes');
+      posts = await Post.find().select('-content').populate('user').populate('categories').populate('club').populate('country').populate('league').populate('tags').populate('likes');
+
     }
 
     res.status(200).json(posts);

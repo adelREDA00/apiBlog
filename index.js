@@ -15,7 +15,7 @@ const clubRoute = require("./routes/club.js");
 const countryRoute = require("./routes/country.js");
 const LeagueRoute = require("./routes/league.js");
 const path = require("path");
-const PORT = process.env.PORT || 3030;
+
 
 //hendlig file with muller
 const multer = require("multer");
@@ -58,29 +58,27 @@ app.use("/api/league", LeagueRoute);
 
 
 
-//files storage
-// File storage
-app.use('/images', express.static(path.join(__dirname, '/images')));
+app.use("/images", express.static(path.join(__dirname, "/images")));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images');
+    cb(null, "images");
   },
   filename: (req, file, cb) => {
-    const fileName = Date.now() + path.extname(file.originalname);
-    cb(null, fileName);
+    cb(null, req.body.name);
   },
 });
 
 const upload = multer({ storage: storage });
-
-app.post('/api/upload', upload.array('images', 5), (req, res) => {
-  res.status(200).json('Images uploaded successfully!');
+app.post("/api/upload", upload.single("file"), (req, res) => {
+  res.status(200).json("File has been uploaded");
 });
+
+
 
 
 //end of files storage
 
-app.listen(PORT, () => {
+app.listen("5000", () => {
   console.log("Backend is running.");
 });

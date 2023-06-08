@@ -77,9 +77,9 @@ router.delete("/", verifyAdmin, async (req, res) => {
 
 
 //GET USER
-router.get("/:id",verifyAdmin, async (req, res) => {
+router.get("/:id",verifyUser, async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id).populate('clubs').populate('countries').populate('leagues');
     const { password, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
