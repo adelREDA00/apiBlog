@@ -3,15 +3,17 @@ const League = require("../models/League");
 const {verifyAdmin} = require("../utils/verifytoken");
 
 //creating new cat
-router.post("/",verifyAdmin, async (req, res) => {
-  const newLeague = new League(req.body);
+router.post("/", verifyAdmin, async (req, res) => {
   try {
-    const savedLeague = await newLeague.save();
+    const leagueData = req.body; // Assuming req.body contains an array of club objects
+
+    const savedLeague = await League.create(leagueData);
     res.status(200).json(savedLeague);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 router.get("/",async (req, res) => {
     try {
       const league = await League.find();
@@ -20,6 +22,18 @@ router.get("/",async (req, res) => {
       res.status(500).json(err);
     }
   });
+
+    //GET club
+router.get("/:id", async (req, res) => {
+  try {
+    const league = await League.findById(req.params.id);
+    res.status(200).json(league);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 
 
   //DELETE League

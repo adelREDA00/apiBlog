@@ -1,4 +1,7 @@
 const jwt = require('jsonwebtoken');
+const Comment = require("../models/Comment");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
@@ -21,7 +24,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyUser = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) {
+    if (req.user._id === req.params._id   || req.user.isAdmin) {
       next();
     } else {
       return res.status(400).json("You can only update ur account!");
@@ -39,8 +42,16 @@ const verifyAdmin = (req, res, next) => {
   });
 };
 
+
+
+
+
+
+
+
+
 module.exports = {
   verifyToken,
   verifyUser,
-  verifyAdmin
+  verifyAdmin,
 };

@@ -7,6 +7,8 @@ const Country = require("./Country");
 const League = require("./League");
 const Player = require("./Player");
 const NatClub = require("./NatClub");
+const Comment = require("./Comment");
+
 
 const PostSchema = new mongoose.Schema(
   {
@@ -54,12 +56,11 @@ const PostSchema = new mongoose.Schema(
     natclub: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "NatClub",
-      default: [],
+   
     }],
     player: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "Player",
-      default: [],
     }],
     country: {
       type: mongoose.Schema.Types.ObjectId,
@@ -75,6 +76,13 @@ const PostSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        default: [],
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
         default: [],
       },
     ],

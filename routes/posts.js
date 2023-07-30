@@ -1,7 +1,11 @@
 const router = require("express").Router();
 const User = require("../models/User");
 const Post = require("../models/Post");
-const {verifyAdmin} = require("../utils/verifytoken");
+const fs = require("fs");
+const path = require("path");
+
+
+const {verifyAdmin,verifyUser,verifyToken} = require("../utils/verifytoken");
 
 //for now only the admin can crud posts
 //CREATE POST
@@ -40,39 +44,124 @@ router.put("/:id",verifyAdmin, async (req, res) => {
     }
   });
 
-//DELETE POST
-router.delete("/:id",verifyAdmin, async (req, res) => {
-    try {
-     
-        try {
-          await Post.deleteOne({ _id: req.params.id });
-          res.status(200).json("Le post a été supprimé..");
-        } catch (err) {
-          res.status(500).json(err);
-        }
-  
-      
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  });
-  
-  // Delete multiple posts or delete all posts
-router.delete("/", verifyAdmin, async (req, res) => {
-  const { postsIds } = req.body;
+
+
+
+  // likes
+router.put("/:id/like", verifyToken, async (req, res) => {
   try {
-    // Delete multiple League
-    await Post.deleteMany({ _id: { $in: postsIds } });
+    const { id } = req.params;
+    const { userId } = req.body; // Assuming you have the user ID available
+
+    // Check if the user has already liked the post
+    const post = await Post.findById(id);
+    const likedByUser = post.likes.includes(userId);
+
+    if (likedByUser) {
+      // User has already liked the post, remove their ID
+      await Post.findByIdAndUpdate(
+        id,
+        {
+          $pull: { likes: userId },
+        }
+      );
+      post.likes.pull(userId); // Update the local post object
+
+      res.status(200).json({ liked: false, count: post.likes.length });
+    } else {
+      // User has not liked the post, add their ID
+      await Post.findByIdAndUpdate(
+        id,
+        {
+          $push: { likes: userId },
+        }
+      );
+      post.likes.push(userId); // Update the local post object
+
+      res.status(200).json({ liked: true, count: post.likes.length });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+  
+  
+
+// DELETE POST
+router.delete("/:id", verifyAdmin, async (req, res) => {
+  try {
+    // Fetch the post data to get the filename of the cover image
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    
+    // Check if the post has a cover image
+    if (post.photo) {
+      // Construct the path to the cover image
+      const imagePath = path.join(__dirname, "../images", post.photo);
+
+      // Delete the image file from the server
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Error deleting image:", err);
+        }
+      });
+    }
+
+
+    // Delete the post from the database
+    await Post.deleteOne({ _id: req.params.id });
+
     res.status(200).json("Le post a été supprimé.");
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+// Delete multiple posts or delete all posts
+router.delete("/", verifyAdmin, async (req, res) => {
+  const { postsIds } = req.body;
+  try {
+    // Fetch the post data for all the posts to be deleted
+    const posts = await Post.find({ _id: { $in: postsIds } });
+
+    // Delete the posts from the database
+    await Post.deleteMany({ _id: { $in: postsIds } });
+
+    // Loop through the posts and delete their cover images (if any)
+    posts.forEach((post) => {
+      if (post.photo) {
+        const imagePath = path.join(__dirname, "../images", post.photo);
+        fs.unlink(imagePath, (err) => {
+          if (err) {
+            console.error("Error deleting image:", err);
+          }
+        });
+      }
+    });
+
+    res.status(200).json("Les posts ont été supprimés.");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+  
+
+
   //GET POST
 router.get("/:id", async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id).populate('user').populate('categories').populate('club').populate('tags').populate('country').populate('league').populate('likes').populate('player').populate('natclub');
+    const post = await Post.findById(req.params.id).populate('user').populate('categories').populate('club').populate('tags').populate('country').populate('league').populate('player').populate('natclub').populate({
+      path: "comments",
+      populate: {
+        path: "user",
+        select: "username profilePic", // Include the fields you want to populate for the user within comments
+      },
+    });
     res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
@@ -116,7 +205,7 @@ router.get("/", async (req, res) => {
       posts = await Post.find({ categories: categoryId }).populate('categories').select('-content').populate('user');
     } else if (clubId) {
       // Find posts by club ID
-      posts = await Post.find({ club: clubId }).select('-content').populate('user').populate('club');
+      posts = await Post.find({ club: clubId }).select('-content').populate('categories').populate('user').populate('club');
     } else if (natclubId) {
       // Find posts by national club ID
       posts = await Post.find({ nationalClub: natclubId }).select('-content').populate('user').populate('natclub');
@@ -128,7 +217,7 @@ router.get("/", async (req, res) => {
       posts = await Post.find({ player: playerId }).select('-content').populate('user').populate('player');
     } else if (leagueId) {
       // Find posts by league ID
-      posts = await Post.find({ league: leagueId }).select('-content').populate('user').populate('league');
+      posts = await Post.find({ league: leagueId }).select('-content').populate('categories').populate('user').populate('league');
     } else if (tagId) {
       // Find posts by tag ID
       posts = await Post.find({ tags: tagId }).select('-content').populate('user').populate('club');

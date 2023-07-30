@@ -4,6 +4,8 @@ const app  = express();
 const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 
 //--------midlewares ROUTES--------//
 const authRoute = require("./routes/auth.js");
@@ -14,6 +16,10 @@ const tagsRoute = require("./routes/tags.js");
 const clubRoute = require("./routes/club.js");
 const countryRoute = require("./routes/country.js");
 const LeagueRoute = require("./routes/league.js");
+const commentsRouter = require("./routes/comments.js");
+const playerRouter = require("./routes/player.js");
+
+
 const path = require("path");
 
 
@@ -22,7 +28,10 @@ const multer = require("multer");
 //mongoDb url 
 dotenv.config();
 //so the app can send json data
-app.use(express.json());
+
+
+app.use(express.json({limit : '50mb',extended : true}))
+app.use(express.urlencoded({limit : '50mb',extended : true}))
 
 // Enable CORS for all routes
 app.use(cors());
@@ -37,6 +46,13 @@ mongoose.connect(process.env.MONGO_URL,
 
 
 //--------midlewares--------//
+// Enable CORS for all routes
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 //cookiepar
 app.use(cookieParser())
 //creating auth users
@@ -55,9 +71,15 @@ app.use("/api/club", clubRoute);
 app.use("/api/country", countryRoute);
 //league
 app.use("/api/league", LeagueRoute);
+//players
+app.use("/api/player", playerRouter);
 
 
+// Import and use the comments router
+app.use("/api/comments", commentsRouter);
 
+
+//store images localy
 app.use("/images", express.static(path.join(__dirname, "/images")));
 
 const storage = multer.diskStorage({
@@ -78,6 +100,19 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 
 
 //end of files storage
+
+//api middleware
+app.use(
+  '/api/football',
+  createProxyMiddleware({
+    target: 'https://api.sportmonks.com/v3',
+    changeOrigin: true,
+    secure: true,
+    pathRewrite: {
+      '^/api/football': '/football',
+    },
+  })
+);
 
 app.listen("5000", () => {
   console.log("Backend is running.");

@@ -4,11 +4,12 @@ const {verifyAdmin} = require("../utils/verifytoken");
 
 
 //creatiing new club
-router.post("/",verifyAdmin, async (req, res) => {
-  const newClub = new Club(req.body);
+router.post("/", verifyAdmin, async (req, res) => {
   try {
-    const savedClub = await newClub.save();
-    res.status(200).json(savedClub);
+    const clubsData = req.body; // Assuming req.body contains an array of club objects
+
+    const savedClubs = await Club.create(clubsData);
+    res.status(200).json(savedClubs);
   } catch (err) {
     res.status(500).json(err);
   }

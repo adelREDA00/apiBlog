@@ -1,15 +1,15 @@
 const router = require("express").Router();
-const Country = require("../models/Country");
+const Player = require("../models/Player");
 const {verifyAdmin} = require("../utils/verifytoken");
 //creating new country
 
 
 router.post("/", verifyAdmin, async (req, res) => {
   try {
-    const countryData = req.body; // Assuming req.body contains an array of club objects
+    const playerData = req.body; // Assuming req.body contains an array of club objects
 
-    const savedCountries = await Country.create(countryData);
-    res.status(200).json(savedCountries);
+    const savedPlayers = await Player.create(playerData);
+    res.status(200).json(savedPlayers);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -18,21 +18,31 @@ router.post("/", verifyAdmin, async (req, res) => {
 
 router.get("/", async (req, res) => {
     try {
-      const tags = await Country.find();
-      res.status(200).json(tags);
+      const Players = await Player.find();
+      res.status(200).json(Players);
     } catch (err) {
       res.status(500).json(err);
     }
   });
 
+      //GET player
+router.get("/:id", async (req, res) => {
+  try {
+    const Players = await Player.findById(req.params.id).populate('country_id');
+    res.status(200).json(Players);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
   //DELETE country
 router.delete("/:id",verifyAdmin, async (req, res) => {
   try {
-    const country = await Country.findById(req.params.id);
+    const player = await Player.findById(req.params.id);
    
       try {
-        await country.deleteOne({ _id: req.params.id });
-        res.status(200).json(" country a été supprimé..");
+        await player.deleteOne({ _id: req.params.id });
+        res.status(200).json(" player a été supprimé..");
       } catch (err) {
         res.status(500).json(err);
       }
@@ -66,11 +76,11 @@ router.put("/:id", verifyAdmin, async (req, res) => {
 
 // Delete multiple country or delete all country
 router.delete("/", verifyAdmin, async (req, res) => {
-  const { countryIds } = req.body;
+  const { playersIds } = req.body;
   try {
     // Delete multiple countries
-    await Country.deleteMany({ _id: { $in: countryIds } });
-    res.status(200).json("countries have been deleted.");
+    await Player.deleteMany({ _id: { $in: playersIds } });
+    res.status(200).json("Player have been deleted.");
   } catch (err) {
     res.status(500).json(err);
   }
