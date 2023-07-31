@@ -5,7 +5,7 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 const { createProxyMiddleware } = require('http-proxy-middleware');
-
+const port = process.env.PORT || 5000;
 
 //--------midlewares ROUTES--------//
 const authRoute = require("./routes/auth.js");
@@ -114,6 +114,8 @@ app.use(
   })
 );
 
-app.listen("5000", () => {
-  console.log("Backend is running.");
+
+
+app.listen(port, () => {
+  console.log(`Backend is running on port ${port}.`);
 });
