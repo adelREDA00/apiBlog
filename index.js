@@ -33,8 +33,17 @@ dotenv.config();
 app.use(express.json({limit : '50mb',extended : true}))
 app.use(express.urlencoded({limit : '50mb',extended : true}))
 
-// Enable CORS for all routes app.use(cors());
+// Enable CORS for all routes 
+// Define an array of allowed origins
+const allowedOrigins = [
+  'https://client-ts.vercel.app',
+  'https://client-ts-adelreda00.vercel.app'
+];
 
+// Configure CORS to allow requests from allowed origins
+app.use(cors({
+  origin: allowedOrigins
+}));
 
 //connecting mongoDB
 mongoose.connect(process.env.MONGO_URL,
