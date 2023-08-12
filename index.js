@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser')
 const express  = require("express");
 const app  = express();
-//const cors = require('cors');
+const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 const { createProxyMiddleware } = require('http-proxy-middleware');
