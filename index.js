@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser')
 const express  = require("express");
 const app  = express();
-const cors = require('cors');
+//const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 const { createProxyMiddleware } = require('http-proxy-middleware');
@@ -33,8 +33,8 @@ dotenv.config();
 app.use(express.json({limit : '50mb',extended : true}))
 app.use(express.urlencoded({limit : '50mb',extended : true}))
 
-// Enable CORS for all routes
-app.use(cors());
+// Enable CORS for all routes app.use(cors());
+
 
 //connecting mongoDB
 mongoose.connect(process.env.MONGO_URL,
@@ -47,12 +47,12 @@ mongoose.connect(process.env.MONGO_URL,
 
 //--------midlewares--------//
 // Enable CORS for all routes
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
-});*/
+});
 //cookiepar
 app.use(cookieParser())
 //creating auth users
