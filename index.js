@@ -35,15 +35,20 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 
 // Enable CORS for all routes 
 // Define an array of allowed origins
-const allowedOrigins = [
-  'https://client-ts.vercel.app',
-  'https://client-ts-adelreda00.vercel.app'
-];
+
 
 // Configure CORS to allow requests from allowed origins
-app.use(cors({
-  origin: allowedOrigins
-}));
+const corsOptions = {
+  origin: [
+    'https://client-ts.vercel.app/',
+    'https://client-ts.vercel.app',
+    'https://client-ts-adelreda00.vercel.app'
+  ],
+  methods: 'GET, POST, PUT, DELETE',
+  allowedHeaders: 'Content-Type, Authorization'
+};
+
+app.use(cors(corsOptions));;
 
 //connecting mongoDB
 
