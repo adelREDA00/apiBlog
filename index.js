@@ -38,7 +38,7 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 
 
 // Configure CORS to allow requests from allowed origins
-const corsOptions = {
+/*const corsOptions = {
   origin: [
     'https://client-ts.vercel.app/',
     'https://client-ts.vercel.app',
@@ -49,7 +49,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));;
-
+*/
 //connecting mongoDB
 
 mongoose.connect(process.env.MONGO_URL, {
