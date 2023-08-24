@@ -42,7 +42,7 @@ const corsOptions = {
   origin: [
     'https://client-ts.vercel.app/',
     'https://client-ts.vercel.app',
-    'https://client-ts-adelreda00.vercel.app'
+    '*'
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
