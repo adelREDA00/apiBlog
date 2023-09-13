@@ -40,7 +40,7 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 
 
 // Configure CORS to allow requests from allowed origins
-const corsOptions = {
+/*const corsOptions = {
   origin: [
     'https://relaxed-mooncake-ea738b.netlify.app',
     'https://client-ts.vercel.app',
@@ -49,7 +49,7 @@ const corsOptions = {
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
-};
+};*/
 
 app.use(cors(corsOptions));;
 
