@@ -5,7 +5,9 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const port = process.env.PORT || 5000;
+const port = process.env.PORT;
+//const port = process.env.PORT || 5000;
+
 
 //--------midlewares ROUTES--------//
 const authRoute = require("./routes/auth.js");
@@ -40,10 +42,12 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 // Configure CORS to allow requests from allowed origins
 const corsOptions = {
   origin: [
+    'https://relaxed-mooncake-ea738b.netlify.app/',
+    'https://relaxed-mooncake-ea738b.netlify.app',
     'https://client-ts.vercel.app/',
     'https://client-ts.vercel.app',
-    'https://relaxed-mooncake-ea738b.netlify.app/',
-    '*'
+    'https://client-ts-adelreda00.vercel.app/',
+
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
