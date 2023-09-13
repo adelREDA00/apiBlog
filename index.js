@@ -68,12 +68,12 @@ mongoose.connect(process.env.MONGO_URL, {
 
 //--------midlewares--------//
 // Enable CORS for all routes
-/*app.use((req, res, next) => {
+app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
-});*/
+});
 //cookiepar
 app.use(cookieParser())
 //creating auth users
@@ -123,7 +123,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 //end of files storage
 
 //api middleware
-/*app.use(
+app.use(
   '/api/football',
   createProxyMiddleware({
     target: 'https://api.sportmonks.com/v3',
@@ -134,7 +134,7 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
     },
   })
 );
-*/
+
 
 
 app.listen(port, () => {
