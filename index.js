@@ -40,7 +40,7 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 
 
 // Configure CORS to allow requests from allowed origins
-/*const corsOptions = {
+const corsOptions = {
   origin: [
     'https://relaxed-mooncake-ea738b.netlify.app',
     'https://client-ts.vercel.app',
@@ -49,7 +49,7 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
-};*/
+};
 
 app.use(cors(corsOptions));;
 
@@ -68,12 +68,12 @@ mongoose.connect(process.env.MONGO_URL, {
 
 //--------midlewares--------//
 // Enable CORS for all routes
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
-});
+});*/
 //cookiepar
 app.use(cookieParser())
 //creating auth users
