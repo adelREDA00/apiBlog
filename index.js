@@ -42,7 +42,8 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 // Configure CORS to allow requests from allowed origins
 const corsOptions = {
   origin: [
-    '*'
+    '*',
+    'https://admino-beta.vercel.app'
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
