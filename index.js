@@ -42,16 +42,7 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 // Configure CORS to allow requests from allowed origins
 const corsOptions = {
   origin: [
-    'https://relaxed-mooncake-ea738b.netlify.app',
-    'https://client-ts.vercel.app',
-    'https://client-ts-adelreda00.vercel.app/',
-    'https://admino-beta.vercel.app/',
-    'https://admino-beta.vercel.app',
-    'https://admino-git-main-adelreda00.vercel.app/',
-    'https://admino-git-main-adelreda00.vercel.app',
-    'https://admino-3fbyl1jfw-adelreda00.vercel.app/',
-    'https://admino-3fbyl1jfw-adelreda00.vercel.app'
-
+    '*'
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
