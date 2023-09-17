@@ -46,7 +46,11 @@ const corsOptions = {
     'https://client-ts.vercel.app',
     'https://client-ts-adelreda00.vercel.app/',
     'https://admino-beta.vercel.app/',
-    'https://admino-beta.vercel.app'
+    'https://admino-beta.vercel.app',
+    'https://admino-git-main-adelreda00.vercel.app/',
+    'https://admino-git-main-adelreda00.vercel.app',
+    'https://admino-3fbyl1jfw-adelreda00.vercel.app/',
+    'https://admino-3fbyl1jfw-adelreda00.vercel.app'
 
   ],
   methods: 'GET, POST, PUT, DELETE',
