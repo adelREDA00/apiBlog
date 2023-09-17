@@ -45,6 +45,8 @@ const corsOptions = {
     'https://relaxed-mooncake-ea738b.netlify.app',
     'https://client-ts.vercel.app',
     'https://client-ts-adelreda00.vercel.app/',
+    'https://admino-beta.vercel.app/',
+    'https://admino-beta.vercel.app'
 
   ],
   methods: 'GET, POST, PUT, DELETE',
