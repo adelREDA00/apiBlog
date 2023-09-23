@@ -43,7 +43,8 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 const corsOptions = {
   origin: [
     '*',
-    'https://admino-beta.vercel.app'
+    'https://admino-beta.vercel.app',
+    'https://client-ts.vercel.app'
   ],
   methods: 'GET, POST, PUT, DELETE',
   allowedHeaders: 'Content-Type, Authorization'
