@@ -5,8 +5,8 @@ const cors = require('cors');
 const dotenv = require("dotenv");
 const mongoose = require("mongoose")
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const port = process.env.PORT ;
-//const port = process.env.PORT || 5000;
+
+const port = process.env.PORT || 5000;
 
 
 //--------midlewares ROUTES--------//
@@ -43,6 +43,7 @@ app.use(express.urlencoded({limit : '50mb',extended : true}))
 const corsOptions = {
   origin: [
     '*',
+    'http://127.0.0.1:5173/',
     'https://admino-beta.vercel.app',
     'https://client-ts.vercel.app'
   ],
